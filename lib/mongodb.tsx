@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-mutable-exports */
 import { MongoClient } from "mongodb";
 
 const uri: any = process.env.MONGODB;
-const options = {
+const options: any = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 };
