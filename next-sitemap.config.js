@@ -1,6 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
+console.log("website here is", process.env.WEBSITE);
 const NextSitemapConfig = {
-  siteUrl: "https://nextarter-chakra.sznm.dev",
+  siteUrl: process.env.WEBSITE,
   generateRobotsTxt: true,
 };
 
