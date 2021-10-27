@@ -13,8 +13,6 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import ThemeToggle from "./ThemeToggle";
-
 const hamburgerMenuLinks = [
   {
     title: "Events",
@@ -53,13 +51,25 @@ export default function withAction() {
   return (
     <>
       <Box px={4}>
-        <Flex h={16} alignItems="center" justifyContent="space-between">
+        <Flex alignItems="center">
           <IconButton
             size="md"
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
             aria-label="Menu"
             onClick={isOpen ? onClose : onOpen}
           />
+          <Box>
+            <Link href="/" title="The Boardr Homepage">
+              <img
+                height="70"
+                width="210"
+                src="/theboardr_logo_horizontal.png"
+                title="The Boardr Logo"
+                alt="The Boardr Logo"
+              />
+            </Link>
+          </Box>
+
           <HStack spacing={8} alignItems="center">
             <HStack as="nav" spacing={4} display={{ base: "none", md: "flex" }}>
               {hamburgerMenuLinks.map((mainMenuLink) =>
@@ -68,20 +78,6 @@ export default function withAction() {
                 ) : null
               )}
             </HStack>
-            <Box>
-              <Link href="/" title="The Boardr Homepage">
-                <img
-                  height="70"
-                  width="210"
-                  src="/theboardr_logo_horizontal.png"
-                  title="The Boardr Logo"
-                  alt="The Boardr Logo"
-                />
-              </Link>
-            </Box>
-            <Box>
-              <ThemeToggle />
-            </Box>
           </HStack>
         </Flex>
 

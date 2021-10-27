@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Stack,
   Flex,
@@ -5,48 +6,111 @@ import {
   Text,
   VStack,
   useBreakpointValue,
+  Box,
 } from "@chakra-ui/react";
+import { GetStaticProps } from "next";
 
-const Home = () => {
+import clientPromise from "../../lib/mongodb";
+
+const Home = (data: any) => {
+  // console.log("data is", data);
+  const {
+    data: { randomHeroImage },
+  } = data;
   return (
-    <Flex
-      w="full"
-      h="100vh"
-      backgroundImage="url(https://theboardr.blob.core.windows.net/photos/10816.jpg)"
-      backgroundSize="cover"
-      backgroundPosition="center center"
-    >
-      <VStack
+    <>
+      <Flex
         w="full"
-        justify="center"
-        px={useBreakpointValue({ base: 4, md: 8 })}
-        bgGradient="linear(to-r, blackAlpha.600, transparent)"
+        h="100vh"
+        backgroundImage={`url(${randomHeroImage})`}
+        backgroundSize="cover"
+        backgroundPosition="center center"
       >
-        <Stack maxW="2xl" align="flex-start" spacing={6}>
-          <Text
-            color="white"
-            fontWeight={700}
-            lineHeight={1.2}
-            fontSize={useBreakpointValue({ base: "3xl", md: "4xl" })}
-            ml={useBreakpointValue({ base: 5, md: 0 })}
-          >
-            The Boardr: Skateboarding and BMX Events
-          </Text>
-          <Stack direction="row">
-            <Button
-              bg="whiteAlpha.300"
-              rounded="full"
+        <VStack
+          w="full"
+          justify="center"
+          px={useBreakpointValue({ base: 4, md: 8 })}
+          bgGradient="linear(to-r, blackAlpha.600, transparent)"
+        >
+          <Stack maxW="2xl" align="flex-start" spacing={6}>
+            <Text
               color="white"
-              _hover={{ bg: "whiteAlpha.500" }}
+              fontWeight={700}
+              lineHeight={1.2}
+              fontSize={useBreakpointValue({ base: "3xl", md: "4xl" })}
               ml={useBreakpointValue({ base: 5, md: 0 })}
             >
-              About Us...
-            </Button>
+              The Boardr: Skateboarding and BMX Events
+            </Text>
+            <Stack direction="row">
+              <Button
+                bg="whiteAlpha.300"
+                rounded="full"
+                color="white"
+                _hover={{ bg: "whiteAlpha.500" }}
+                ml={useBreakpointValue({ base: 5, md: 0 })}
+              >
+                About Us...
+              </Button>
+            </Stack>
           </Stack>
-        </Stack>
-      </VStack>
-    </Flex>
+        </VStack>
+      </Flex>
+      <Flex>
+        <Box>
+          <Text
+            fontSize={useBreakpointValue({ base: "3xl", md: "4xl" })}
+            ml={useBreakpointValue({ base: 2, md: 0 })}
+          >
+            what the fuck
+          </Text>
+          <Text ml={useBreakpointValue({ base: 2, md: 0 })}>
+            a paragraph o shit
+          </Text>
+        </Box>
+      </Flex>
+    </>
   );
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async () => {
+  // adding a list of front page hero images to randomly pick from to cycle through
+  const client = await clientPromise;
+  // const isConnected = await client.isConnected();
+  // console.log("isConnected is", isConnected);
+
+  let isConnected;
+  try {
+    await clientPromise;
+    isConnected = true;
+  } catch (e) {
+    console.log("Error connecting to MongoDB:", e);
+    isConnected = false;
+  }
+  // console.log("isConnected is", isConnected);
+
+  if (!isConnected) await client.connect({ poolSize: 10 });
+  const mongoResponse = await client
+    .db("theboardr")
+    .collection("heroimagepool")
+    .find()
+    .toArray();
+  // console.log(
+  //   "mongoResponse is",
+  //   mongoResponse,
+  //   "use that object to return a random image"
+  // );
+  const randomHeroImage =
+    mongoResponse[Math.floor(Math.random() * mongoResponse.length)];
+  // console.log("randomHeroImage is", randomHeroImage);
+
+  // console.log("participationDetailsList", participationDetailsList);
+  return {
+    props: {
+      data: { randomHeroImage: randomHeroImage.url },
+    },
+    revalidate: 60,
+  };
+};
