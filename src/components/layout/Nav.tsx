@@ -69,12 +69,15 @@ export default function withAction() {
               )}
             </HStack>
             <Box>
-              <img
-                style={{ maxHeight: "70px" }}
-                src="/theboardr_logo_horizontal.png"
-                title="The Boardr Logo"
-                alt="The Boardr Logo"
-              />
+              <Link href="/" title="The Boardr Homepage">
+                <img
+                  height="70"
+                  width="210"
+                  src="/theboardr_logo_horizontal.png"
+                  title="The Boardr Logo"
+                  alt="The Boardr Logo"
+                />
+              </Link>
             </Box>
             <Box>
               <ThemeToggle />
