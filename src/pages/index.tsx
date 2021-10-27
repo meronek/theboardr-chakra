@@ -86,7 +86,7 @@ export const getStaticProps: GetStaticProps = async () => {
     await clientPromise;
     isConnected = true;
   } catch (e) {
-    console.log("Error connecting to MongoDB:", e);
+    // console.log("Error connecting to MongoDB:", e);
     isConnected = false;
   }
   // console.log("isConnected is", isConnected);
