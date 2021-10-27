@@ -91,7 +91,7 @@ export const getStaticProps: GetStaticProps = async () => {
   }
   // console.log("isConnected is", isConnected);
 
-  if (!isConnected) await client.connect({ poolSize: 10 });
+  if (!isConnected) await client.connect();
   const mongoResponse = await client
     .db("theboardr")
     .collection("heroimagepool")
