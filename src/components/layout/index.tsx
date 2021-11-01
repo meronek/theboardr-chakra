@@ -1,8 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 import Footer from "./Footer";
-import Header from "./Header";
+import Nav from "./Nav";
 
 type LayoutProps = {
   children: ReactNode;
@@ -10,10 +10,10 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <Box margin="0 auto" maxWidth={800} transition="0.5s ease-out">
-      <Box margin="8">
-        <Header />
-        <Box as="main" marginY={22}>
+    <Box margin="0 auto" maxWidth={1200} transition="0.5s ease-out">
+      <Box margin={useBreakpointValue({ base: 0, md: 2 })} marginTop={5}>
+        <Nav />
+        <Box as="main" marginY={22} marginX={5}>
           {children}
         </Box>
         <Footer />
