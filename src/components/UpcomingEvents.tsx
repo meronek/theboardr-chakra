@@ -2,7 +2,7 @@
 /* eslint-disable sonarjs/no-nested-template-literals */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Heading, Text, Stack, SimpleGrid, Link } from "@chakra-ui/react";
-
+import fromNow from "fromnow";
 function escapeHtml(text: any) {
   return text
     .replace(/&amp;/g, "&")
@@ -38,16 +38,7 @@ const EventListing: any = ({ eventDetail }: any) => {
         </Link>
       </Box>
       <Stack>
-        <Text
-          textTransform="uppercase"
-          fontWeight={800}
-          fontSize="lg"
-          letterSpacing={1.1}
-        >
-          {escapeHtml(eventDetail.StartDateText)} at{" "}
-          {escapeHtml(eventDetail.Location)}
-        </Text>
-        <Heading fontSize="2xl">
+        <Heading fontSize="2xl" my={3}>
           <Link
             href={`/events/${eventDetail.EventID}/${eventDetail.Title.replace(
               / /g,
@@ -59,6 +50,14 @@ const EventListing: any = ({ eventDetail }: any) => {
             {eventDetail.Title}
           </Link>
         </Heading>
+        <Text fontWeight={800} fontSize="md" letterSpacing={1.1} my={3}>
+          {fromNow(new Date(eventDetail.StartDate), { max: 1, suffix: true })}{" "}
+          on
+          <br />
+          {escapeHtml(eventDetail.StartDateText)}
+          <br />
+          {escapeHtml(eventDetail.Location)}
+        </Text>
         <Text>{escapeHtml(eventDetail.ShortDescription)}</Text>
       </Stack>
     </Box>
