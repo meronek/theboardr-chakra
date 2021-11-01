@@ -13,6 +13,7 @@ import { GetStaticProps } from "next";
 
 import clientPromise from "../../lib/mongodb";
 import StartLists from "../components/StartLists";
+import UpcomingEvents from "../components/UpcomingEvents";
 
 const Home = (data: any) => {
   // console.log("data is", data);
@@ -21,6 +22,9 @@ const Home = (data: any) => {
   } = data;
   const {
     data: { startListsDetails },
+  } = data;
+  const {
+    data: { upcomingEvents },
   } = data;
 
   return (
@@ -65,6 +69,7 @@ const Home = (data: any) => {
       <Flex>
         <Box w="full">
           <StartLists startListsDetails={startListsDetails} />
+          <UpcomingEvents upcomingEvents={upcomingEvents} />
           <Heading as="h2" fontSize="3xl">
             A Header
           </Heading>
@@ -115,10 +120,19 @@ export const getStaticProps: GetStaticProps = async () => {
   );
   const startListsDetails = await resStartListsDetails.json();
 
-  // console.log("participationDetailsList", participationDetailsList);
+  const resUpcomingEvents = await fetch(
+    `https://www.theboardrlive.com/api/theboardrdotcom?Type=UpcomingEvents&key=${process.env.BOARDRAPIKEY}&limit=8`
+  );
+  const upcomingEvents = await resUpcomingEvents.json();
+
+  // console.log("upcomingEvents", upcomingEvents);
   return {
     props: {
-      data: { randomHeroImage: randomHeroImage.url, startListsDetails },
+      data: {
+        randomHeroImage: randomHeroImage.url,
+        startListsDetails,
+        upcomingEvents,
+      },
     },
     revalidate: 60,
   };
