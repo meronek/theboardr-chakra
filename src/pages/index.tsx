@@ -7,11 +7,11 @@ import {
   VStack,
   useBreakpointValue,
   Box,
-  Heading,
 } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 
 import clientPromise from "../../lib/mongodb";
+import BlogPosts from "../components/BlogPosts";
 import StartLists from "../components/StartLists";
 import UpcomingEvents from "../components/UpcomingEvents";
 
@@ -25,6 +25,9 @@ const Home = (data: any) => {
   } = data;
   const {
     data: { upcomingEvents },
+  } = data;
+  const {
+    data: { blogPosts },
   } = data;
 
   return (
@@ -70,12 +73,7 @@ const Home = (data: any) => {
         <Box w="full">
           <StartLists startListsDetails={startListsDetails} />
           <UpcomingEvents upcomingEvents={upcomingEvents} />
-          <Heading as="h2" fontSize="3xl">
-            A Header
-          </Heading>
-          <Text ml={useBreakpointValue({ base: 2, md: 0 })}>
-            a paragraph o shit
-          </Text>
+          <BlogPosts blogPosts={blogPosts} />
         </Box>
       </Flex>
     </>
@@ -121,17 +119,23 @@ export const getStaticProps: GetStaticProps = async () => {
   const startListsDetails = await resStartListsDetails.json();
 
   const resUpcomingEvents = await fetch(
-    `https://www.theboardrlive.com/api/theboardrdotcom?Type=UpcomingEvents&key=${process.env.BOARDRAPIKEY}&limit=8`
+    `https://www.theboardrlive.com/api/theboardrdotcom?Type=UpcomingEvents&key=${process.env.BOARDRAPIKEY}&limit=4`
   );
   const upcomingEvents = await resUpcomingEvents.json();
 
-  // console.log("upcomingEvents", upcomingEvents);
+  const resBlogPosts = await fetch(
+    `https://www.theboardrlive.com/api/theboardrdotcom?Type=BlogPosts&key=${process.env.BOARDRAPIKEY}&limit=4`
+  );
+  const blogPosts = await resBlogPosts.json();
+
+  // console.log("blogPosts", blogPosts);
   return {
     props: {
       data: {
         randomHeroImage: randomHeroImage.url,
         startListsDetails,
         upcomingEvents,
+        blogPosts,
       },
     },
     revalidate: 60,
