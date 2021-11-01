@@ -7,16 +7,22 @@ import {
   VStack,
   useBreakpointValue,
   Box,
+  Heading,
 } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 
 import clientPromise from "../../lib/mongodb";
+import StartLists from "../components/StartLists";
 
 const Home = (data: any) => {
   // console.log("data is", data);
   const {
     data: { randomHeroImage },
   } = data;
+  const {
+    data: { startListsDetails },
+  } = data;
+
   return (
     <>
       <Flex
@@ -57,13 +63,11 @@ const Home = (data: any) => {
         </VStack>
       </Flex>
       <Flex>
-        <Box>
-          <Text
-            fontSize={useBreakpointValue({ base: "3xl", md: "4xl" })}
-            ml={useBreakpointValue({ base: 2, md: 0 })}
-          >
-            what the fuck
-          </Text>
+        <Box w="full">
+          <StartLists startListsDetails={startListsDetails} />
+          <Heading as="h2" fontSize="3xl">
+            A Header
+          </Heading>
           <Text ml={useBreakpointValue({ base: 2, md: 0 })}>
             a paragraph o shit
           </Text>
@@ -106,10 +110,15 @@ export const getStaticProps: GetStaticProps = async () => {
     mongoResponse[Math.floor(Math.random() * mongoResponse.length)];
   // console.log("randomHeroImage is", randomHeroImage);
 
+  const resStartListsDetails = await fetch(
+    `https://www.theboardrlive.com/api/theboardrdotcom?Type=ExecuteProcedure&Proc=SCOREBOARD_StartListDetailsAllBoardrEvents&key=${process.env.BOARDRAPIKEY}`
+  );
+  const startListsDetails = await resStartListsDetails.json();
+
   // console.log("participationDetailsList", participationDetailsList);
   return {
     props: {
-      data: { randomHeroImage: randomHeroImage.url },
+      data: { randomHeroImage: randomHeroImage.url, startListsDetails },
     },
     revalidate: 60,
   };
