@@ -31,7 +31,7 @@ const BlogListing: any = ({ blogDetail }: any) => {
         </Link>
       </Box>
       <Stack>
-        <Heading fontSize="2xl">
+        <Heading fontSize="2xl" my={3}>
           <Link
             href={`/post/${blogDetail.SEOUrl}`}
             title={escapeHtml(blogDetail.Title)}
